@@ -11,6 +11,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 import java.time.LocalDateTime
 
 //
@@ -39,7 +40,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //
         //Date of record entry
         val date = LocalDateTime.now()
+        //
         Log.d(TAG,"Data to send...$selection, $description, $date" )
+        //Package the user data in a JsonObject.
+        val json = JSONObject()
+        //
+        //Define the key for each value I want to send to the server.
+        json.put("option", selection)
+        json.put("description", description)
+        json.put("date", date)
+        //
+        //Once done packaging, invoke the send function and feed the data I want to save.
+        send(json)
     }
     //
     //Get the selected option from the dropdown list.
@@ -64,10 +76,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     //For that to happen I`ll need to make a post request.
     //that can be done by incorporating libraries such as retrofit or volley.
     //in this case I`ll work with volley to make the post request.
-    fun send(){
+    fun send(data:JSONObject){
         //
         //Feed the server url..i.e where the data will be saved.
-        val url = ""
+        val url = "http://mutall.co.ke/solo/todo/todo.php"
         //
         //Create a requestque using the volley class.
         val requestque = Volley.newRequestQueue(this)
