@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Scheduler</string>
+    <string-array name="spinner_items">
+        <item>Todo</item>
+        <item>Plan</item>
+        <item>Decision</item>
+        <item>Lesson</item>
+    </string-array>
+</resources>
