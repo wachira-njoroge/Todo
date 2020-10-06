@@ -1,5 +1,6 @@
 package com.awesome.scheduler
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             //
             //Invoke the send to database method which requires a JSonObject.
             send(input)
+            val intent = Intent(applicationContext, Crud::class.java).apply {
+                putExtra("data", data.toString())
+            }
+            startActivity(intent)
+
         }else
         Toast.makeText(this, "Type something to proceed", Toast.LENGTH_SHORT).show()
     }
@@ -60,6 +66,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         data.put("option", selection)
         data.put("description", description)
         data.put("date", date)
+
         return data
     }
     //Save the data to the server.
@@ -68,8 +75,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     //in this case I`ll work with volley to make the post request.
     private fun send(data:JSONObject){
         //
-        //Feed the server url..i.e where the data will be sent.
-        val url = "http://mutall.co.ke/soloo/todo/todo.php"
+        val url = Constants.url
         //
         //Create a requestque using the volley class.
         val requestque = Volley.newRequestQueue(this)
