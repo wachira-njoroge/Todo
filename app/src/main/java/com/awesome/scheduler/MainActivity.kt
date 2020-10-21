@@ -13,11 +13,10 @@ import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import java.time.LocalDateTime
-
+import java.time.format.DateTimeFormatter
 //
 //Initialize a constant tag for debugging purpose.
 private const val TAG = "Log_message"
-
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //
         //set the button ClickListener to this (since this class implements onclicklistener)
         save.setOnClickListener(this)
+
 
     }
     //Once the user clicks the save button, get the information and save the record.
@@ -36,13 +36,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             //Get the user input fed.
             val input = get_data()
             //
-            //Invoke the send to database method which requires a JSonObject.
+            //Invoke the send to database method that takes a JsonObject...and returns some data.
             send(input)
-            val intent = Intent(applicationContext, Crud::class.java).apply {
-                putExtra("data", data.toString())
-            }
-            startActivity(intent)
-
+            //
+            //Package the results to be viewed in another activity other than this.
         }else
         Toast.makeText(this, "Type something to proceed", Toast.LENGTH_SHORT).show()
     }
@@ -56,11 +53,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //Get the user input.i.e the selected option, description and the date.
         val selection = spinner.selectedItem.toString()
         val description = text.text.toString()
-        //Date of record entry
-        val date = LocalDateTime.now()
         //
-        //Display the entries on the debugger.
-        Log.d(TAG,"Data to send...$selection, $description, $date" )
+        //Date of record entry
+        var day = LocalDateTime.now()
+        //
+        val date = day.format(DateTimeFormatter.ISO_DATE)
         //
         //Package the user data into the JsonObject structure in preparation to send to server.
         data.put("option", selection)
@@ -75,29 +72,55 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     //in this case I`ll work with volley to make the post request.
     private fun send(data:JSONObject){
         //
+        //Get the server address.
         val url = Constants.url
         //
         //Create a requestque using the volley class.
         val requestque = Volley.newRequestQueue(this)
         //
         //Define the nature of the request to the server...i.e is it a GET or a POST
-        val jsonrequest = JsonObjectRequest(Request.Method.POST,url, data, {
-            //
-            //OnSuccess, Alert and display the response.
-            response -> Toast.makeText(this, "$response", Toast.LENGTH_LONG ).show()
-        }, {
-            //
-            //OnFailure, alert and display the error message.
-            error: VolleyError? ->
-            //Display the error message.
-            Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show()
-            //
-            //Show the error message on the debugger.
-            Log.d(TAG, error.toString())
+        val jsonrequest = JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            data,
+            {
+                //
+                //OnSuccess, Alert Success message to user.
+                    response ->
+                Toast.makeText(applicationContext, "activity saved successfully", Toast.LENGTH_SHORT).show()
+                //.......
+                //Get the response json result
+                val input = response.getJSONArray("results")
+                //
+                //Prepare to launch the next activity
+                val i = Intent(applicationContext, Crud::class.java)
+                //
+                //Send the response object to the next activity.
+                i.putExtra("result", input.toString())
+                //
+                //Launch the activity.
+                startActivity(i)
+            },
+            {
+                //
+                //OnFailure, alert and display the error message.
+                    error: VolleyError? ->
+                //Display the error message.
+                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show()
+                //
+                //Show the error message on the debugger.
+                Log.d(TAG  , error.toString())
 
-        })
-
+            }
+        )
+        //
         requestque.add(jsonrequest)
         }
 
- }
+}
+
+
+
+
+
+
