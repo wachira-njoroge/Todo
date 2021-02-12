@@ -8,9 +8,10 @@
                                                    android:layout_marginLeft="30dp">
 
     <androidx.cardview.widget.CardView
-            android:layout_width="343dp"
-            android:layout_height="113dp"
+            android:layout_width="332dp"
+            android:layout_height="112dp"
             android:layout_margin="5dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:cardCornerRadius="4dp" app:cardElevation="3dp"
@@ -18,35 +19,59 @@
             android:layout_marginStart="24dp" android:layout_marginRight="24dp">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="116dp">
+                android:layout_height="match_parent">
             <TextView
-                    android:layout_width="99dp"
-                    android:layout_height="32dp" android:id="@+id/name"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/due"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintBottom_toBottomOf="@+id/due" app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0"/>
+                    android:layout_width="124dp"
+                    android:layout_height="34dp" android:id="@+id/name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/due"/>
             <TextView
-                    android:layout_width="104dp"
-                    android:layout_height="32dp" android:id="@+id/due"
-                    app:layout_constraintStart_toEndOf="@+id/name" app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toStartOf="@+id/state" app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/des" app:layout_constraintVertical_chainStyle="packed"/>
-            <TextView
-                    android:text="TextView"
-                    android:layout_width="280dp"
-                    android:layout_height="53dp" android:id="@+id/des"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/due" app:layout_constraintHorizontal_bias="0.5"/>
+                    android:layout_width="75dp"
+                    android:layout_height="26dp" android:id="@+id/due"
+                    app:layout_constraintStart_toEndOf="@+id/name"
+                    app:layout_constraintEnd_toStartOf="@+id/state"
+                    app:layout_constraintTop_toTopOf="@+id/name" app:layout_constraintBottom_toBottomOf="@+id/name"
+                    app:layout_constraintHorizontal_bias="0.5" app:layout_constraintVertical_bias="0.428"/>
             <TextView
                     android:text="pending"
-                    android:layout_width="76dp"
-                    android:layout_height="32dp" android:id="@+id/state"
-                    app:layout_constraintStart_toEndOf="@+id/due" app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/name"
-                    app:layout_constraintBottom_toBottomOf="@+id/name" app:layout_constraintVertical_bias="1.0"/>
+                    android:layout_width="69dp"
+                    android:layout_height="26dp" android:id="@+id/state"
+                    android:gravity="right"
+                    app:layout_constraintTop_toTopOf="@+id/due"
+                    app:layout_constraintBottom_toBottomOf="@+id/due" app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/due"
+            />
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="330dp"
+                    android:layout_height="49dp" android:id="@+id/des"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.555" app:layout_constraintTop_toBottomOf="@+id/name"
+                    android:layout_marginTop="4dp"/>
+            <TextView
+                    android:text="Mark As Complete"
+                    android:textColor="@color/white"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:background="@drawable/complete_tv"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_height="23dp" android:id="@+id/complete"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/des"/>
+            <TextView
+                    android:text="Edit"
+                    android:textColor="@color/white"
+                    android:padding="4dp"
+                    android:background="@drawable/edit_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/edit"
+                    app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/state" app:layout_constraintHorizontal_bias="0.971"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
