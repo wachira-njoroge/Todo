@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -14,63 +15,122 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 //
 //Initialize a constant tag for debugging purpose.
 private const val TAG = "Log_message"
+//
+//Declare a variable that will be initialized at some later time.
+lateinit var selected:String
+//
+//Create a class that extends the activity class.
+//Activity class contains all application lifecycle methods.
+//e.g., OnCreate, OnDestroy, OnPause, OnResume etc.
+//AppCompatActivity ensures the app can launch on all android OS versions
+//unlike the activity class
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //
-        //set the button ClickListener to this (since this class implements onclicklistener)
+        //set the button ClickListener to this for all buttons (since this class implements OnClickListener)
         save.setOnClickListener(this)
-
+        todo.setOnClickListener(this)
+        idea.setOnClickListener(this)
+        assign.setOnClickListener(this)
+        plan.setOnClickListener(this)
 
     }
-    //Once the user clicks the save button, get the information and save the record.
+    //This function gets the value of the selected radio button
+    fun radio_value(){
+        //
+        //Get the radio option chosen.
+        val radio_option = radio.checkedRadioButtonId
+        //
+        //Get the selected button.
+        val selection:RadioButton = findViewById(radio_option)
+        //
+        //Get the value from selection.
+        selected = selection.text.toString()
+    }
+    //
+    //Every button has an onclick
+    //Implement all button`s logic here for each, when clicked.
     override fun onClick(v: View?) {
         //
-        //Perform checks on edittext.If empty, alert user to type in a description.
-        if (text.text.isNotEmpty()){
+        //Get all the buttons by their Id and assign functionality to each
+        when(v?.id) {
             //
-            //Get the user input fed.
-            val input = get_data()
+            //When either of the radio buttons are clicked, update the classification hint input field
+            //and set textview text in relation to the selected radio button option.
+            R.id.plan -> {nature.setText("Classify your Plan")
+                            nature_text.setHint("e.g Vacation")}
+            R.id.idea -> {nature.setText("Classify your Idea")
+                            nature_text.setHint("e.g Business")}
+            R.id.assign -> {nature.setText("Classify your Task")
+                            nature_text.setHint("e.g Assignment")}
+            R.id.todo -> {nature.setText("Classify your Todo")
+                            nature_text.setHint("e.g Hiking")}
             //
-            //Invoke the send to database method that takes a JsonObject...and returns some data.
-            send(input)
+            //Once the user clicks the save button, get the information and save the record.
+            R.id.save ->
+                //
+                //Perform checks on edittext.If empty, alert user to type in a description.
+                if (full_des.text.isNotEmpty()) {
+                    //
+                    //Get the value of the radio button selected
+                    radio_value()
+                    //
+                    //Get the user input fed.
+                    val input = get_data()
+                    //
+                    //Invoke the send to database method that takes a JsonObject...and returns some data.
+                    send(input)
+                    //
+                    //Package the results to be viewed in another activity other than this.
+                } else
+                    Toast.makeText(this, "Type something to proceed", Toast.LENGTH_SHORT).show()
             //
-            //Package the results to be viewed in another activity other than this.
-        }else
-        Toast.makeText(this, "Type something to proceed", Toast.LENGTH_SHORT).show()
+            //Can`t reach here..anyway let me handle such an occurence though impossible
+            else -> println("something is up")
+        }
+
     }
     //
     //Get the option selected and the description fed in by the user.
-    private fun get_data(): JSONObject {
+    fun get_data(): JSONObject {
         //
         //Create a Json object structure where the data will be stored.
-        val data = JSONObject()
+        val record = JSONObject()
         //
-        //Get the user input.i.e the selected option, description and the date.
-        val selection = spinner.selectedItem.toString()
-        val description = text.text.toString()
+        //Get the schedule type from the user input
+        val type = nature_text.text.toString()
         //
-        //Date of record entry
-        var day = LocalDateTime.now()
+        //Get the schedule description
+        val description = full_des.text.toString()
         //
-        val date = day.format(DateTimeFormatter.ISO_DATE)
+        //Get the date of record entry
+        val date = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)
         //
-        //Package the user data into the JsonObject structure in preparation to send to server.
-        data.put("option", selection)
-        data.put("description", description)
-        data.put("date", date)
-
-        return data
+        //Categorize user input to form post data
+        val values = JSONObject()
+        values.put("option", selected)
+        values.put("name", type)
+        values.put("description", description)
+        values.put("date", date)
+        //
+        //Package the post data and the method to run on the server into a JsonObject
+        //structure in preparation to send to server.
+        record.put("method","create")
+        record.put("data",values)
+        //
+        return record
     }
     //Save the data to the server.
     //For that to happen I`ll need to make a post request.
     //that can be done by incorporating libraries such as retrofit or volley.
     //in this case I`ll work with volley to make the post request.
-    private fun send(data:JSONObject){
+    private fun send(record:JSONObject) {
         //
         //Get the server address.
         val url = Constants.url
@@ -82,41 +142,36 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val jsonrequest = JsonObjectRequest(
             Request.Method.POST,
             url,
-            data,
+            record,
             {
                 //
-                //OnSuccess, Alert Success message to user.
-                    response ->
-                Toast.makeText(applicationContext, "activity saved successfully", Toast.LENGTH_SHORT).show()
-                //.......
-                //Get the response json result
-                val input = response.getJSONArray("results")
-                //
-                //Prepare to launch the next activity
-                val i = Intent(applicationContext, Crud::class.java)
-                //
-                //Send the response object to the next activity.
-                i.putExtra("result", input.toString())
-                //
-                //Launch the activity.
-                startActivity(i)
+                //OnSuccess,
+                response ->
+                    //
+                    //Alert Success message to user.
+                    Toast.makeText(applicationContext, "Save successful", Toast.LENGTH_SHORT).show()
+                    //
+                    //Show the success message on the logcat.
+                    Log.d(TAG, "$response")
+                    //
+                    //Prepare to launch the next activity
+                    //Launch the recyclerview activity.
+                    startActivity(Intent(this, Crud::class.java))
             },
             {
                 //
                 //OnFailure, alert and display the error message.
-                    error: VolleyError? ->
-                //Display the error message.
-                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show()
-                //
-                //Show the error message on the debugger.
-                Log.d(TAG  , error.toString())
-
+                error: VolleyError? ->
+                    //Display the error message.
+                    Toast.makeText(this, "Check your Network Connection status", Toast.LENGTH_SHORT).show()
+                    //
+                    //Show the error message on the debugger.
+                    Log.d(TAG  , error.toString())
             }
         )
         //
         requestque.add(jsonrequest)
-        }
-
+    }
 }
 
 
