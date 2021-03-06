@@ -9,16 +9,23 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_constraintGuide_begin="198dp" android:id="@+id/guideline"/>
+
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="382dp"
-            android:layout_height="468dp"
+            android:layout_width="match_parent"
+            android:layout_height="411dp"
             android:id="@+id/recyclerView"
-            app:layout_constraintTop_toBottomOf="@+id/searchView" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.516" android:layout_marginLeft="2dp"
-            android:layout_marginStart="2dp" android:layout_marginRight="10dp" android:layout_marginEnd="10dp"/>
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/add"/>
+    <!--            app:layout_constraintHorizontal_bias="0.516"-->
     <SearchView
-            android:layout_width="311dp"
+            android:layout_width="match_parent"
             android:layout_height="25dp"
             android:id="@+id/searchView"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="2dp"
@@ -28,7 +35,7 @@
             android:textSize="14dp"
             android:textStyle="italic"
             android:gravity="center"
-            android:layout_width="347dp"
+            android:layout_width="match_parent"
             android:layout_height="23dp" android:id="@+id/bucket"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
