@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
     //This function gets the value of the selected radio button
-    fun radio_value(){
+    private fun radio_value(){
         //
         //Get the radio option chosen.
         val radio_option = radio.checkedRadioButtonId
@@ -63,14 +63,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             //
             //When either of the radio buttons are clicked, update the classification hint input field
             //and set textview text in relation to the selected radio button option.
-            R.id.plan -> {nature.setText("Classify your Plan")
-                            nature_text.setHint("e.g Vacation")}
-            R.id.idea -> {nature.setText("Classify your Idea")
-                            nature_text.setHint("e.g Business")}
-            R.id.assign -> {nature.setText("Classify your Task")
-                            nature_text.setHint("e.g Assignment")}
-            R.id.todo -> {nature.setText("Classify your Todo")
-                            nature_text.setHint("e.g Hiking")}
+            R.id.plan -> {
+                nature.text = "Classify your Plan"
+                nature_text.hint = "e.g Vacation"
+            }
+            R.id.idea -> {
+                nature.text = "Classify your Idea"
+                nature_text.hint = "e.g Business"
+            }
+            R.id.assign -> {
+                nature.text = "Classify your Task"
+                nature_text.hint = "e.g Assignment"
+            }
+            R.id.todo -> {
+                nature.text = "Classify your Todo"
+                nature_text.hint = "e.g Hiking"
+            }
             //
             //Once the user clicks the save button, get the information and save the record.
             R.id.save ->
@@ -98,7 +106,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
     //
     //Get the option selected and the description fed in by the user.
-    fun get_data(): JSONObject {
+    private fun get_data(): JSONObject {
         //
         //Create a Json object structure where the data will be stored.
         val record = JSONObject()

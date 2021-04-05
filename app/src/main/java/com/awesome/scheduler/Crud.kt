@@ -118,7 +118,7 @@ class Crud:AppCompatActivity(), View.OnClickListener {
             val primary = pk.toInt()
             //
             //Populate the recyclerview with the server response, as cardItems.
-            arraylist.add(Model(this, primary, nam, des,date,status))
+            arraylist.add(Model(primary, nam, des,date,status))
         }
         //Initialize the Activity adapter that takes the arraylist of items to display
         //and returns a recyclerview.

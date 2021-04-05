@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.method.ScrollingMovementMethod
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.cardview.view.*
@@ -11,9 +12,9 @@ import kotlinx.android.synthetic.main.cardview.view.*
 //Create a ViewHolder class that takes an itemView on construction.
 //These class extends the recyclerView which contains a viewHolder.
 //Pass the itemView as a parameter upon ViewHolder construction to the recyclerView`s ViewHolder.
-class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView), View.OnClickListener{
+class ViewHolder(itemView: View, context:Context):RecyclerView.ViewHolder(itemView), View.OnClickListener{
     //Initialize a context to work with once a view is clicked
-    lateinit var ctx:Context
+    val ctx = context
     fun bindItems(model: Model){
         //
         //Make textview within the cardItem scrollable.
@@ -24,17 +25,20 @@ class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView), View.OnClick
         itemView.des.text = model.description
         itemView.due.text = model.date
         itemView.state.text = model.status
+        itemView.pk.text = model.primary_key.toString()
         //
         //Set the click listener for clickable views in the itemview
         itemView.complete.setOnClickListener(this)
         itemView.edit.setOnClickListener(this)
         //
         //Context is needed, to launch an activity once  the edit view is clicked.
-        ctx = model.context
+//        ctx = model.context
     }
     override fun onClick(v: View?) {
         //Get adapter position of the clicked holder
         val itemPos = this.adapterPosition
+        val mypk = itemView.pk.text
+        Toast.makeText(ctx, "$mypk", Toast.LENGTH_SHORT).show()
         //Implement click function for each clickable view
         when(v!!.id){
             //
